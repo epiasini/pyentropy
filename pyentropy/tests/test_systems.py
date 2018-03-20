@@ -58,8 +58,8 @@ def setup_1d():
     # simple channel which corrupts 50% randomly
     x = np.random.randint(0,9+1,100000)
     y = x.copy()
-    indx = np.random.permutation(len(x))[:len(x)/2]
-    y[indx] = np.random.randint(0,9+1,len(x)/2)
+    indx = np.random.permutation(len(x))[:len(x)//2]
+    y[indx] = np.random.randint(0,9+1,len(x)//2)
     # analytic results
     HX = np.log2(10)
     HXY = -9*0.05*np.log2(0.05) - 0.55*np.log2(0.55)
@@ -99,7 +99,7 @@ def test_1d_nsb():
 @dec.skipif(not nsb_ext_available(), "nsb-entropy binary not found on path")
 @dec.slow
 def test_1d_nsbext():
-    yield do_1d_check, 'nsb-ext', None
+    yield do_1d_check, 'nsbext', None
 
 @dec.skipif(not statk_available(), "STATK wrapper not available")
 @dec.slow
@@ -165,7 +165,7 @@ def test_1d_nsb_sorted():
 @dec.skipif(not nsb_ext_available(), "nsb-entropy binary not found on path")
 @dec.slow
 def test_1d_nsbext_sorted():
-    yield do_1d_check_sorted, 'nsb-ext', None
+    yield do_1d_check_sorted, 'nsbext', None
 
 @dec.skipif(not statk_available(), "STATK wrapper not available")
 @dec.slow

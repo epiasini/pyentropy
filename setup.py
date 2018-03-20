@@ -13,25 +13,22 @@ from distutils.errors import CCompilerError, DistutilsExecError
 extension_build_failed = False
 
 def ext_failed_warning(name):
-    print ('*'*70+'\n')*3
+    print(('*'*70+'\n')*3)
 
-    print """WARNING: The %s extension module could not be 
+    print(("""WARNING: The %s extension module could not be 
 compiled. pyEntropy should run, but the features
 present in that file will not be available.
 
 Above is the ouput showing how the compilation
-failed."""%name
+failed."""%name))
 
     if sys.platform == 'win32':
-        print
-
-        print """I see you are using Windows. The default
+        print ("""I see you are using Windows. The default
 compiler for this platform is the Microsoft Visual
 Studio C compiler. However, a free alternative
-compiler called mingw can be used instead."""
+compiler called mingw can be used instead.""")
 
-    print
-    print ('*'*70+'\n')*3
+    print(('*'*70+'\n')*3)
     global extension_build_failed
     extension_build_failed = True
 
@@ -62,7 +59,7 @@ class build_ext_allow_fail( build_ext ):
     def build_extension(self, ext):
         try:
             build_ext.build_extension(self, ext)
-        except CCompilerError, x:
+        except CCompilerError:
             ext_failed_warning(ext.name)
 
 
@@ -71,7 +68,7 @@ setup(name='pyentropy',
       description='Entropy and Information Theoretic Estimates',
       author=pyentropy.__author__,
       author_email='pyentropy@robince.net',
-      url='http://code.google.com/p/pyentropy',
+      url='https://github.com/robince/pyentropy',
       packages=['pyentropy','pyentropy.tests','pyentropy.statk'],
       ext_package='pyentropy',
       ext_modules=exts,
@@ -79,10 +76,10 @@ setup(name='pyentropy',
       )
 
 if extension_build_failed:
-    print ('*'*70+'\n')*3
+    print(('*'*70+'\n')*3)
 
-    print """WARNING: Building of some extensions failed. Please
-see the messages above for details.\n"""
+    print ("""WARNING: Building of some extensions failed. Please
+see the messages above for details.\n""")
 
-    print ('*'*70+'\n')*3
+    print(('*'*70+'\n')*3)
 

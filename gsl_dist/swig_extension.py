@@ -3,7 +3,7 @@
 
 Currently no control when SWIG will be run.
 """
-from gsl_Extension import gsl_Extension, gsl_Location
+from .gsl_Extension import gsl_Extension, gsl_Location
 from distutils.util import spawn
 from distutils.dep_util import newer_group
 from distutils.file_util import copy_file
@@ -79,7 +79,7 @@ class SWIG_Extension(gsl_Extension):
                 includes.append('-I' + i)
             cmd = [gsl_Location.get_swig(),] + swig_flags + includes
             cmd.extend(['-o', target] + sources)
-            print string.join(cmd, " ")
+            print(string.join(cmd, " "))
             spawn(cmd, 1, 1)
             dst = name
             src = name + '.py'

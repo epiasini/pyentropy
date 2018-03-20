@@ -19,7 +19,7 @@ distributions. These functions are exposed in the top-level pyentropy
 namespace.
 
 """
-from __future__ import division
+
 import numpy as np
 from tempfile import NamedTemporaryFile
 import os
@@ -52,9 +52,9 @@ def prob(x, m, method='naive'):
 
     """
     if not np.issubdtype(x.dtype, np.integer): 
-        raise ValueError, "Input must be of integer type"
+        raise ValueError("Input must be of integer type")
     if x.max() > m-1:
-        raise ValueError, "Input contains values that are too large"
+        raise ValueError("Input contains values that are too large")
     
     C = np.bincount(x)
     if C.size < m:   # resize if any responses missed
@@ -93,7 +93,7 @@ def _probcount(C, N, method='naive'):
         # general add-constant beta estimate
         P = (C + beta) / (N + (beta*C.size))
     else:
-        raise ValueError, 'Unknown sampling method: '+str(est)
+        raise ValueError('Unknown sampling method: '+str(est))
     return P
 
 
@@ -184,7 +184,7 @@ def nsb_entropy(P, N, dim, var=False):
     
     """
     
-    freqs = np.round(P*N)
+    freqs = np.round(P*N).astype(np.int)
     tf = NamedTemporaryFile(mode='w',suffix='.txt')
 
     # write file header
@@ -194,13 +194,13 @@ def nsb_entropy(P, N, dim, var=False):
     tf.file.write("# columns: " + str(freqs.sum().astype(int)) + "\n")
 
     # write data
-    for i in xrange(freqs.size):
+    for i in range(freqs.size):
         tf.file.write(freqs[i]*(str(i)+" "))
     tf.file.write("\n")
     tf.file.close()
 
     # run nsb-entropy application
-    subprocess.call(["nsb-entropy","-dpar","-iuni","-cY","-s1","-e1",tf.name[:-4]], 
+    subprocess.call(["nsb-entropy","-dpar","-iuni","-c0","-s1","-e1",tf.name[:-4]], 
                     stdout=open(os.devnull),stderr=open(os.devnull))
 
     # read results
@@ -238,13 +238,13 @@ def dec2base(x, b, digits):
 
     """
     if not np.issubdtype(x.dtype, np.integer):
-        raise ValueError, "Input x must be integer"
+        raise ValueError("Input x must be integer")
     if len(x.shape)==1:
         # 1D vector
         x = np.reshape(x,(x.size,1))
     xs = x.shape
     if xs[1] != 1:
-        raise ValueError, "Input x must be a 1D array or column vector!"
+        raise ValueError("Input x must be a 1D array or column vector!")
 
     power = np.ones((xs[0],1)) * (b ** np.c_[digits-1:-0.5:-1,].T)
     x = np.tile(x,(1,digits))
@@ -289,7 +289,7 @@ def decimalise(x, n, b):
 
     """
     if x.shape[0] != n or x.max() > b-1:
-        raise ValueError, "Input vector x doesnt match parameters"
+        raise ValueError("Input vector x doesnt match parameters")
     powers = b**np.arange(n-1,-0.5,-1)
     d_x = np.dot(x.T,powers).astype(int)
     return d_x
@@ -345,7 +345,7 @@ def quantise(input, m, uniform='sampling', minmax=None,
         if centers:
             bin_centers = np.r_[bin_bounds - (bin_width/2.0), bin_bounds[-1]+(bin_width/2.0)]
     else:
-        raise ValueError, "Unknown value of 'uniform'"
+        raise ValueError("Unknown value of 'uniform'")
 
     q_value = np.digitize(input, bin_bounds)
 
@@ -364,7 +364,7 @@ def quantise_discrete(input, m):
     # astype forces a copy even if already int
     X = input.astype(np.int)
     if (X.min() < 0) or not np.all(np.asarray(X,dtype=np.int)==X):
-        raise ValueError, "Expecting non-negative integer input"
+        raise ValueError("Expecting non-negative integer input")
 
     if input.max() < m:
         # nothing to do
@@ -401,7 +401,7 @@ def quantise_discrete(input, m):
         Nbins = Nbins - 1
 
     # relabel
-    newlabels = range(len(labels))
+    newlabels = list(range(len(labels)))
     for i in range(len(labels)):
         if newlabels[i] != labels[i]:
             # only reassign if necessary

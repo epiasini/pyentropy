@@ -1,2 +1,1 @@
-
-from wrap import nsb_entropy, bub_entropy
+from .wrap import nsb_entropy, bub_entropy
